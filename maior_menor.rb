@@ -12,25 +12,20 @@ def ask_dificult
 end
 
 def draw_secret_number(dificult)
-  if dificult == 1
+  case dificult
+  when 1 
     max = 30
-  else
-    if dificult == 2
-      max = 60
-    else
-      if dificult == 3
-        max = 100
-      else
-        if dificult == 4
-          max = 150
-        else
-          max = 200
-        end
-      end
-    end
+  when 2
+    max = 60
+  when 3
+    max = 100
+  when 4
+    max = 150 
+  else 
+    max = 200
   end
-  puts "Escolhendo um nº secreto entre 0 e #{max - 1}..."
-  draw = rand(max)
+  puts "Escolhendo um nº secreto entre 1 e #{max}..."
+  draw = rand(max) + 1
   puts "Escolhido... que tal adivinhar hoje nosso nº secreto?"
   draw
 end
@@ -63,25 +58,41 @@ def check_hit(numero_secreto, chute)
   false
 end
 
-welcome
-dificult = ask_dificult
-numero_secreto = draw_secret_number dificult
+def play (nome, dificult)
+  numero_secreto = draw_secret_number dificult
 
-pontos_ate_agora = 1000
-limite_de_tentativas = 5
-chutes = []
 
-for tentativa in 1..limite_de_tentativas
+  pontos_ate_agora = 1000
+  limite_de_tentativas = 5
+  chutes = []
 
-  chute = request_a_number chutes, tentativa, limite_de_tentativas
-  chutes << chute
+  for tentativa in 1..limite_de_tentativas
 
-  pontos_a_perder = (chute.to_i - numero_secreto).abs / 2.0
-  pontos_ate_agora -= pontos_a_perder
+    chute = request_a_number chutes, tentativa, limite_de_tentativas
+    chutes << chute
 
-  if check_hit numero_secreto, chute
-    break
+    pontos_a_perder = (chute.to_i - numero_secreto).abs / 2.0
+    pontos_ate_agora -= pontos_a_perder
+
+    if check_hit numero_secreto, chute
+      break
+    end
   end
+  puts "Você ganhou #{pontos_ate_agora} pontos."
 end
 
-puts "Você ganhou #{pontos_ate_agora} pontos."
+def nao_quer_jogar
+    puts "Defeseja jogar novamente? (S/N)"
+    quer_jogar = gets.strip
+    nao_quer_jogar = quer_jogar.upcase == "N"
+end
+
+nome = welcome
+dificult = ask_dificult
+
+loop do
+    play nome, dificult
+    if nao_quer_jogar
+      break
+    end
+end 
