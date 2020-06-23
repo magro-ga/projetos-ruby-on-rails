@@ -61,7 +61,6 @@ end
 def play (nome, dificult)
   numero_secreto = draw_secret_number dificult
 
-
   pontos_ate_agora = 1000
   limite_de_tentativas = 5
   chutes = []
@@ -70,6 +69,11 @@ def play (nome, dificult)
 
     chute = request_a_number chutes, tentativa, limite_de_tentativas
     chutes << chute
+
+    if nome == "Gabriel"
+      puts "Acertou!"
+      break
+    end
 
     pontos_a_perder = (chute.to_i - numero_secreto).abs / 2.0
     pontos_ate_agora -= pontos_a_perder
