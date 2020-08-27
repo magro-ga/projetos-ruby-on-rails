@@ -1,4 +1,27 @@
 require_relative 'ui'
+require_relative 'rank'
+
+def choice_secret_word
+	warn_choosing_word
+	text = File.read("dicionario.txt")
+	all_words = text.split "\n"
+	chosen_number = rand(all_words.size)
+	secret_word = all_words[chosen_number].downcase
+	warn_chosen_word secret_word
+end
+
+def choice_secret_word_memory_economy
+	warn_choosing_word
+	archive = File.new("dicionario.txt")
+	numbers_of_words = archive.gets.to_i
+	chosen_number = rand(numbers_of_words)
+	for line in 1..(chosen_number-1)
+			archive.gets
+	end
+	secret_word = archive.gets.strip.downcase
+	archive.close
+	warn_chosen_word secret_word
+end
 
 def masked_word(kicks, secret_word)
 		mask = ""
@@ -62,14 +85,22 @@ def play(name)
 	end
 
 	warn_points points_at_now
-
+	points_at_now
 end
 
 def fork_game
 		name = say_welcome
+		total_points = 0
+
+		warn_current_champion read_rank
 
 		loop do
-				play name
+				total_points += play name
+				warn_totaol_points total_points
+
+				if read_rank[1].to_i < total_points
+						save_rank name, total_points
+				end
 				if dont_want_play?
 						break
 				end
