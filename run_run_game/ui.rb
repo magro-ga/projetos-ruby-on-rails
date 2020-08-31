@@ -6,3 +6,12 @@ def say_welcome
     puts "Começaremos o jogo para Você, #{name}"
     name
 end
+
+def write(map)
+		puts map
+end
+
+def ask_move
+		puts "Para onde deseja ir?"
+		moviment = gets.strip
+end
