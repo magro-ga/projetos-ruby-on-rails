@@ -41,7 +41,7 @@ def valid_position?(map, position)
     if burst_lines || burst_columns
         return false
     end
-
+    
     if map[position[0]][position[1]] == "X"
         return false
     end
