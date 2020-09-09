@@ -7,14 +7,14 @@ def read_map(number)
 end
 
 def find_player(map)
-    hero_caracter = "H"
+    hero_character = "H"
     map.each_with_index do |current_line, line|
-        hero_column = current_line.index hero_caracter
+        hero_column = current_line.index hero_character
         if hero_column
             return [line, hero_column]
         end
     end
-    # n achei
+    nil
 end
 
 def calculates_new_position(hero, direction)
@@ -47,25 +47,54 @@ def valid_position?(map, position)
     true
 end
 
-def move_ghost(map, line, column)
-    position = [line, column + 1]
-    if valid_position? map, position
-        map[line][column] = " "
-        map[position[0]][position[1]] = "F"
+def vector_sum(vector1, vector2)
+    [vector1[0] + vector2[0], vector1[1] + vector2[1]]
+end
+
+def valid_positions_in(map, new_map, position)
+    positions = []
+    moviments = [[+1, 0], [0, +1], [-1, 0], [0, -1]]
+    moviments.each do |moviment|
+        new_position = vector_sum(moviment, position)
+        if valid_position?(map, new_position) && valid_position?(new_map, new_position)
+            positions << new_position
+        end
     end
+    positions
+end
+
+def move_ghost(map, new_map, line, column)
+    positions = valid_positions_in map, new_map, [line, column]
+    if positions.empty?
+        return
+    end
+
+    random = rand positions.size
+    position = positions[random]
+    map[line][column] = " "
+    new_map[position[0]][position[1]] = "F"
+end
+
+def copy_map(map)
+    new_map = map.join("\n").tr("F", " ").split "\n"
 end
 
 def move_ghosts(map)
-    ghosts_caracter = "F"
+    ghosts_character = "F"
+    new_map = copy_map map
     map.each_with_index do |current_line, line|
-      current_line.chars.each_with_index do |current_caracter, column|
-            is_ghost = current_caracter == ghosts_caracter
+      current_line.chars.each_with_index do |current_character, column|
+            is_ghost = current_character == ghosts_character
             if is_ghost
-                move_ghost map, line, column
+                move_ghost map, new_map, line, column
             end
         end
     end
+    new_map
+end
 
+def player_lost?(map)
+    lost =  !find_player(map)
 end
 
 def play(name)
@@ -76,15 +105,17 @@ def play(name)
         direction = ask_movement
         hero = find_player map
         new_position = calculates_new_position hero, direction
-
         if !valid_position? map, new_position
             next
         end
-        
         map[hero[0]][hero[1]] = " "
         map[new_position[0]][new_position[1]] = "H"
 
-        move_ghosts map
+        map = move_ghosts map
+        if player_lost? map
+            game_over
+            break
+        end
     end
 end
 
