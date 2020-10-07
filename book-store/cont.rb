@@ -6,5 +6,10 @@ module Cont
     end
     self
   end
+  
+  def max_required
+    @max_required
+  end
+
   attr_reader :max_required
 end

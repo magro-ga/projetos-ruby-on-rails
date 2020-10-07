@@ -1,18 +1,15 @@
-class Book 
-  attr_reader :title, :price, :year_launch
-  def initialize(title, price, year_launch, include_reprint)
+class Product
+  attr_reader :title, :price, :year_launch, :publisher
+
+  def initialize(title, price, year_launch, publisher)
     @title = title
     @year_launch = year_launch
-    @include_reprint = include_reprint
     @price = calculates_price(price)
+    @publisher = publisher
   end
 
   def to_csv
     "#{@title},#{@year_launch},#{@price}"
-  end
-
-  def include_reprint?
-    @include_reprint
   end
 
   private
@@ -31,4 +28,3 @@ class Book
     end
   end
 end
-
