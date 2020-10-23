@@ -1,3 +1,5 @@
+<p id="notice"><%= notice %></p>
+
 <table class="table table-bordered table-hover">
   <thead>
     <tr>
@@ -10,6 +12,9 @@
     </tr>
   </thead>
   <tbody>
-    <%= render @products %>
+    <%= render @products_per_department %>
   </tbody>
 </table>
+
+<%= link_to 'Editar departamento', edit_department_path(@department), class:"btn btn-default" %>
+<%= link_to 'Voltar', departments_path, class:"btn btn-default" %>

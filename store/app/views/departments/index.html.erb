@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Departments</h1>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @departments.each do |department| %>
+      <tr>
+        <td><%= department.name %></td>
+        <td><%= link_to 'Ver produtos', department, class:"btn btn-default" %></td>
+        <td><%= link_to 'Editar', edit_department_path(department), class:"btn btn-default" %></td>
+        <td><%= link_to 'Deletar', department, method: :delete, data: { confirm: 'Tem certeza que deseja deletar?' }, class:"btn btn-default" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Criar Novo Departamento', new_department_path, class:"btn btn-default" %>
